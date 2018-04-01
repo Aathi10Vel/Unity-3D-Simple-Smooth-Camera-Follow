@@ -1,0 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerMove : MonoBehaviour {
+
+	public CharacterController playerControl;
+	public float moveSpeed=10.0f;
+	public Vector3 moveDirections;
+	public bool checkActions;
+	public float playerGravity=20.0f;
+	public float vGravity;
+
+	// Use this for initialization
+	void Start () {
+		checkActions = false;
+		playerControl = GetComponent<CharacterController>();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		playerMove ();
+	}
+
+	public void playerMove(){
+
+		//Check Player is on Move or in Idle State...
+
+		//If Use Animations You can check with that Animations State Also...
+		//Here i'm not using any Animated Characters so I Checked with Keys Press State....
+		if (Input.anyKey.Equals (false)) {
+			checkActions = false;
+		} else {
+			checkActions = true;
+		}
+
+
+		moveDirections = new Vector3 (Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
+		moveDirections = transform.TransformDirection (moveDirections);
+		vGravity -= playerGravity * Time.deltaTime;
+		moveDirections.y = vGravity;
+		moveDirections *= moveSpeed;
+		playerControl.Move (moveDirections * Time.deltaTime);
+	}
+}
